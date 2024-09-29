@@ -1,4 +1,5 @@
 <?php
+
 namespace App\ApiResource;
 
 use App\Entity\User;
@@ -6,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
@@ -14,6 +16,7 @@ use App\State\EntityToDtoStateProvider;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use App\State\EntityClassDtoStateProcessor;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
@@ -21,24 +24,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationItemsPerPage: 2,
     provider: EntityToDtoStateProvider::class,
     stateOptions: new Options(entityClass: User::class),
-    description:'user data',
+    description: 'user data',
+    routePrefix :'/mobile',
     paginationClientItemsPerPage: true,
     processor: EntityClassDtoStateProcessor::class,
     operations: [
+        new Get(),
+        new GetCollection(),
         new Post(
-            uriTemplate: '/mobile/user', 
-            status: 301
+            validationContext: ['groups' => ['Default', 'postValidation']],
         ),
-        new Patch(uriTemplate: '/mobile/user/{id}', requirements: ['id' => '\d+']),
-        new Put(uriTemplate: '/mobile/user/{id}', requirements: ['id' => '\d+']),
-        new GetCollection(uriTemplate: '/mobile/user'),
-        new Get(
-            uriTemplate: '/mobile/user/{id}',
-            requirements: ['id' => '\d+'] 
-        ),
+        new Patch(),
+        new Delete(),
     ],
-    normalizationContext: ['groups' => ['user:read', 'mobile:read']],
-    denormalizationContext: ['groups' => ['user:write']]
 )]
 
 #[ApiFilter(SearchFilter::class, properties: [
@@ -47,15 +45,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class UserApi
 {
-    #[Groups(['user:read'])]
+    // #[Groups(['user:read'])]
+    #[ApiProperty(readable: false, writable: false, identifier: true)]
     public ?int $id = null;
-    #[Groups(['user:read', 'user:write'])]
+    // #[Groups(['user:read', 'user:write'])]
+    #[Assert\Email]
+    #[Assert\NotBlank]
     public ?string $email = null;
-    #[Groups(['user:read', 'user:write'])]
+    // #[Groups(['user:read', 'user:write'])]
+    #[Assert\NotBlank]
     public ?string $fullname = null;
-     /**
-     * @var Collection<int, Car>
+    /**
+     * @var Collection<int, Car>|[null]
      */
-    
     public ?array $cars = null;
+    // #[Groups(['user:write'])]
+
+    #[ApiProperty(readable: false)]
+    #[Assert\NotBlank(groups: ['postValidation'])]
+    public ?string $password = null;
 }

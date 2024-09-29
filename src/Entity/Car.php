@@ -70,25 +70,4 @@ class Car
         return $this->caruser;
     }
 
-    public function addCaruser(user $caruser): static
-    {
-        if (!$this->caruser->contains($caruser)) {
-            $this->caruser->add($caruser);
-            $caruser->setCar($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCaruser(User $caruser): static
-    {
-        if ($this->caruser->removeElement($caruser)) {
-            // set the owning side to null (unless already changed)
-            if ($caruser->getCar() === $this) {
-                $caruser->setCar(null);
-            }
-        }
-
-        return $this;
-    }
 }

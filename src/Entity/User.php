@@ -49,8 +49,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'usercar', fetch:'EAGER')]
     private Collection $cars;
     
-    #[ORM\ManyToOne(inversedBy: 'caruser')]
-    private ?Car $car = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
 
     public function __construct()
     {
@@ -156,14 +156,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCar(): ?Car
+
+    public function getImage(): ?string
     {
-        return $this->car;
+        return $this->image;
     }
 
-    public function setCar(?Car $car): static
+    public function setImage(?string $image): static
     {
-        $this->car = $car;
+        $this->image = $image;
 
         return $this;
     }
