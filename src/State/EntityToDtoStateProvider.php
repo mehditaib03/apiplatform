@@ -2,8 +2,6 @@
 
 namespace App\State;
 
-namespace App\State;
-
 use App\Entity\User;
 use App\ApiResource\CarApi;
 use App\ApiResource\UserApi;
@@ -11,6 +9,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\State\ProviderInterface;
 use ApiPlatform\Doctrine\Orm\State\ItemProvider;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\State\Pagination\TraversablePaginator;
@@ -21,6 +20,7 @@ class EntityToDtoStateProvider implements ProviderInterface
     public function __construct(
         #[Autowire(service: CollectionProvider::class)] private ProviderInterface $collectionProvider,
         #[Autowire(service: ItemProvider::class)] private ProviderInterface $itemProvider,
+        // private MicroMapperInterface $microMapper
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
@@ -60,6 +60,7 @@ class EntityToDtoStateProvider implements ProviderInterface
         $dto->fullname = $entity->getFullname();
 
         // Map cars to CarApi DTOs
+        // $dto->cars = $entity->getCars()->toArray();
         $dto->cars = array_map(fn($car) => $this->mapCarToDto($car), $entity->getCars()->toArray());
 
         return $dto;

@@ -4,17 +4,27 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CarRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
+
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 
+// #[ApiResource(
+//     normalizationContext: ['groups' => ['user:read', 'mobile:read']],
+// )]
+
+// #[Groups(['user:read'])]
 class Car
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    // #[Groups(['user:read'])]
     private ?int $id = null;
 
+    // #[Groups(['user:read'])]
     #[ORM\Column(length: 255)]
     private ?string $year = null;
 

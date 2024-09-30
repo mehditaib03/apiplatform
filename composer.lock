@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f889291c9b6b76ac5fdccb9f5fe19775",
+    "content-hash": "0e045505b6fc88e78ff99c50ede3261f",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -9155,6 +9155,55 @@
                 }
             ],
             "time": "2024-09-17T12:47:12+00:00"
+        },
+        {
+            "name": "symfonycasts/micro-mapper",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SymfonyCasts/micro-mapper.git",
+                "reference": "5afc27949adb026f709b264c186eb90129309e5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SymfonyCasts/micro-mapper/zipball/5afc27949adb026f709b264c186eb90129309e5e",
+                "reference": "5afc27949adb026f709b264c186eb90129309e5e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10.39",
+                "symfony/filesystem": "^6.3|^7.0",
+                "symfony/framework-bundle": "^6.3|^7.0",
+                "symfony/phpunit-bridge": "^6.3|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfonycasts\\MicroMapper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan Weaver",
+                    "homepage": "https://symfonycasts.com"
+                }
+            ],
+            "description": "A tiny, underwhelming data mapper to map one object to another!",
+            "keywords": [
+                "data-mapper"
+            ],
+            "support": {
+                "issues": "https://github.com/SymfonyCasts/micro-mapper/issues",
+                "source": "https://github.com/SymfonyCasts/micro-mapper/tree/v0.2.0"
+            },
+            "time": "2024-06-27T12:06:15+00:00"
         },
         {
             "name": "twig/extra-bundle",

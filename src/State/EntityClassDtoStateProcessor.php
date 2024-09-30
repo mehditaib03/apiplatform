@@ -2,17 +2,20 @@
 
 namespace App\State;
 
+use App\Entity\Car;
 use App\Entity\User;
 use App\ApiResource\UserApi;
+use ApiPlatform\Metadata\Post;
+use App\Repository\CarRepository;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Metadata\DeleteOperationInterface;
+use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use ApiPlatform\Metadata\Post;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 
 class EntityClassDtoStateProcessor implements ProcessorInterface
@@ -23,12 +26,16 @@ class EntityClassDtoStateProcessor implements ProcessorInterface
         // using doctrine remove processor 
         #[Autowire(service: RemoveProcessor::class)] private ProcessorInterface $removeProcessor,
         private UserPasswordHasherInterface $userPasswordHasher,
+        private CarRepository $carRepository,
+        // data mapping 
+        private MicroMapperInterface $microMapper
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         assert($data instanceof UserApi);
         $entity = $this->mapDtoToEntity($data);
+        // $entity = $this->mapDtoToEntity2($data);
         // remove user if we Detect Delete operation
         if ($operation instanceof DeleteOperationInterface) {
             $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
@@ -61,22 +68,35 @@ class EntityClassDtoStateProcessor implements ProcessorInterface
         if ($dto->password) {
             $entity->setPassword($this->userPasswordHasher->hashPassword($entity, $dto->password));
         }
+        // if ($dto->cars) {
+        //     foreach ($dto->cars as $carId) {
+        //         $car = $this->carRepository->find($carId);
+        //         if ($car) {
+        //             $entity->addCar($car); // Add or update the relationship
+        //         }
+        //     }
+        // }
         // $entity->addCar($dto->cars);
         // TODO: handle dragon treasures
         return $entity;
     }
 
+    private function mapDtoToEntity2(object $dto): object
+    {
+        return $this->microMapper->map($dto, User::class);
+    }
+
     // private function resetPassword(UserApi $data)
     // {
     //     $user = $this->userRepository->findOneBy(['email' => $data->email]);
-    
+
     //     if (!$user) {
     //         throw new \Exception('User not found.');
     //     }
-    
+
     //     $user->setPassword($this->userPasswordHasher->hashPassword($user, $data->password));
     //     $this->userRepository->save($user);
-    
+
     //     return ['message' => 'Password reset successfully.'];
     // }
 }

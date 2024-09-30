@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Car>
      */
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'usercar', fetch:'EAGER')]
+    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'usercar', cascade: ["persist"], orphanRemoval: true)]
     private Collection $cars;
     
     #[ORM\Column(length: 255, nullable: true)]
