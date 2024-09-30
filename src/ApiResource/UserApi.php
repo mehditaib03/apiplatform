@@ -61,7 +61,7 @@ class UserApi
     #[Assert\NotBlank(groups: ['resetValidation'])]
     public ?string $email = null;
     // #[Groups(['user:read', 'user:write'])]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['resetValidation'])]
     public ?string $fullname = null;
 
     /**
